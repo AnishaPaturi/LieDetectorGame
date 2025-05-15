@@ -1,7 +1,7 @@
 // app/results.tsx
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import ResultGraph from '@/components/ResultGraph';
+import { ResultGraph } from '@/components/ResultGraph';
 
 export default function ResultsScreen() {
   const { data } = useLocalSearchParams();
