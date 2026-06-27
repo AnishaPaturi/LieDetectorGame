@@ -1,55 +1,102 @@
 # 🕵️‍♂️ AI-Powered Lie Detector App
 
-This mobile app uses machine learning to analyze facial microexpressions and voice tone to estimate the probability of deception in recorded or live video conversations. Built with **React Native** and powered by a **FastAPI** backend, the app extracts facial features using **OpenFace** or **MediaPipe** and voice characteristics using **OpenAI’s Whisper**. A custom-trained ML model processes these signals to generate a "truth score" over time, which is visualized as an interactive timeline. Users can upload videos or participate in a fun **"Two Truths and a Lie"** game mode with friends. The app combines real-time UX, psychology, and AI to create an engaging and technically rich experience for both casual and experimental use.
+[![React Native](https://img.shields.io/badge/React_Native-v0.74+-61DAFB?logo=react&logoColor=black&style=flat-square)](https://reactnative.dev)
+[![Expo](https://img.shields.io/badge/Expo-v51.0+-000000?logo=expo&logoColor=white&style=flat-square)](https://expo.dev)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Python-009688?logo=fastapi&logoColor=white&style=flat-square)](https://fastapi.tiangolo.com)
+[![Express](https://img.shields.io/badge/Express-Node.js-000000?logo=express&logoColor=white&style=flat-square)](https://expressjs.com)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white&style=flat-square)](https://www.mongodb.com)
+
+An interactive mobile application that uses machine learning to analyze facial microexpressions (via MediaPipe FaceMesh) and vocal tone variations (via Librosa audio analysis) to estimate the probability of deception in real-time or recorded videos. It features a user authentication flow, live camera recording, deceptive score charts, and a "Two Truths and a Lie" multiplayer game mode.
 
 ---
 
-## 🧰 Tech Stack
+## 📂 Project Directory Structure
 
-### 📱 Frontend (Mobile App using React Native)
+```directory
+LieDetectorGame/
+├── backend-node/         # Express.js REST API (User authentication & database management)
+├── backend-python/       # FastAPI ML Inference Server (Facial & Audio feature extraction + classification)
+├── frontend-app/         # Expo / React Native Mobile Application Client
+├── ml-models/            # Machine Learning training scripts, notebooks, and reference models
+└── README.md             # Project documentation and setup guide
+```
 
-- **React Native**: Framework for building the mobile app using JavaScript. Enables a shared codebase for Android and iOS.
-- **Expo**: Simplifies React Native development. Handles camera, media, and device APIs with minimal setup.
-- **expo-camera**: Captures video input from the user's device camera.
-- **expo-av**: Plays recorded audio and video within the app for review or feedback.
-- **expo-file-system**: Reads and stores video/audio files locally on the device.
-- **react-native-chart-kit** / **Victory Native**: Visualizes deception scores, facial/voice timelines, and other analytics in user-friendly charts.
-- **axios**: Sends video and audio data from the app to the backend API for processing.
-- **React Navigation**: Manages screens and navigation for different features like Upload, Results, and Game Mode.
-- **Firebase Auth (optional)**: Handles user login/signup if you want users to save history or game results.
+---
 
-### 🧠 Backend (API Server using Python)
+## 🛠️ Tech Stack
 
-- **FastAPI**: High-performance web framework for building the backend REST API. Handles video upload, invokes ML models, and returns results.
-- **Pydantic**: Validates request/response data structures in FastAPI. Ensures secure and clean communication between frontend and backend.
-- **Uvicorn**: ASGI server to run FastAPI efficiently.
-- **Celery + Redis (optional)**: Used if you want to handle long video/audio processing asynchronously in the background.
+- **Frontend Mobile App**: React Native, Expo, Expo Camera, Expo AV, Axios, React Navigation, React Native Chart Kit
+- **Node.js Authentication Server**: Express, Mongoose (MongoDB Atlas), JSON Web Token (JWT), Multer, Bcrypt
+- **Python ML Inference Server**: FastAPI, Uvicorn, Scikit-learn, Joblib, MediaPipe, Librosa, OpenCV-Python, MoviePy
+- **Database**: MongoDB Atlas
 
-### 🤖 Machine Learning (Deception Analysis)
+---
 
-- **OpenFace** or **MediaPipe**: Extracts facial landmarks and microexpressions (eye movement, blink rate, lip compression) from each video frame.
-- **OpenAI Whisper**: Converts speech in the video to text and extracts voice tone features like pitch, hesitation, and speaking rate.
-- **Librosa / pyAudioAnalysis**: Analyzes audio for tone features such as pitch variability, speaking speed, and pauses.
-- **Scikit-learn / PyTorch**: Trains a machine learning classifier that combines facial and voice features to predict deception probability.
-- **Pandas + NumPy**: Used for data processing and feature engineering before feeding into the ML model.
-- **Joblib / TorchScript**: Used to save and serve trained models in production for inference.
+## 🚀 Getting Started
 
-### 🗃️ Storage & Database
+### 1. Database & Express Server (`backend-node`)
+The Express server handles user registration and login, storing credentials securely in MongoDB Atlas.
 
-- **Local File Storage** (MVP): Temporarily stores uploaded video/audio files on the backend server for processing.
-- **AWS S3** *(optional)*: For storing videos and audio at scale in production.
-- **SQLite** (MVP): Simple local database to store session logs, timestamps, and results.
-- **PostgreSQL** *(production)*: Robust database for managing users, session history, and scoring data if scaling up.
+1. Navigate to the `backend-node` folder:
+   ```bash
+   cd backend-node
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up the `.env` file (update your Mongo URI and set a JWT secret):
+   ```env
+   MONGO_URI=your_mongodb_connection_string
+   JWT_SECRET=your_jwt_secret
+   PORT=5000
+   ```
+4. Start the server:
+   ```bash
+   npm start
+   ```
 
-### 🚀 Deployment & Hosting
+### 2. Python ML Inference Server (`backend-python`)
+The Python server processes videos, extracts visual/audio characteristics, and runs them through the trained Random Forest classifier.
 
-- **Docker**: Containerizes the backend and ML models to make deployment easy and consistent.
-- **Render / Railway / Fly.io**: Hosts the FastAPI backend + model server online with automatic deployments. Great for MVPs.
-- **Vercel / Expo Go / EAS**: Deploys the React Native frontend or runs it on devices using Expo Go or compiles it into production builds.
+1. Navigate to the `backend-python` folder:
+   ```bash
+   cd backend-python
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Run the FastAPI development server:
+   ```bash
+   uvicorn main:app --reload --host 0.0.0.0 --port 8000
+   ```
 
-### 🎮 Optional Stretch Tools
+### 3. Mobile Client (`frontend-app`)
+The mobile client enables camera recording, uploading files, seeing analytics dashboards, and playing the game.
 
-- **OBS + WebRTC**: If you want to analyze live webcam feeds later on (stretch goal).
-- **Auth0 / Firebase**: Manage authentication if users need accounts.
-- **LangChain + LLMs** *(future)*: Could be added to analyze what was said and flag suspicious or contradictory speech semantically.
-![Uploading image.png…]()
+1. Navigate to the `frontend-app` folder:
+   ```bash
+   cd frontend-app
+   ```
+2. Install client-side dependencies:
+   ```bash
+   npm install
+   ```
+3. Launch Expo:
+   ```bash
+   npx expo start
+   ```
+4. Open on Android Emulator, iOS Simulator, or scan the QR code using the **Expo Go** app on your physical device.
+
+---
+
+## 🧠 ML Model Pipeline Details
+1. **Facial Feature Extraction**: Computes eyebrows-to-eyes ratios (indicating eyebrow raising/tension) using normalized MediaPipe coordinates.
+2. **Audio Feature Extraction**: Performs fundamental frequency estimation (pitch tracing) using the YIN algorithm or spectral centroid tracking.
+3. **Classification**: Serves a 2-feature Random Forest model to predict truthfulness scores over time.
+
+---
+
+## 🏷️ Tags
+`#machine-learning` `#react-native` `#expo` `#fastapi` `#nodejs` `#express` `#mongodb` `#ai` `#computer-vision` `#audio-processing` `#deception-detection` `#lie-detector`

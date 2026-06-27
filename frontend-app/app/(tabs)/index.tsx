@@ -45,7 +45,7 @@ export default function App() {
 
     try {
       // Replace 192.168.0.183 with your backend server's IP address or domain
-      const response = await axios.post('https://cd18-113-193-19-90.ngrok-free.app/api/login', {
+      const response = await axios.post('https://cd18-113-193-19-90.ngrok-free.app/api/auth/login', {
         email: email,
         password: password,
       });
@@ -114,7 +114,7 @@ export default function App() {
 
     try {
       // Replace 192.168.0.183 with your backend server's IP address or domain
-      const response = await axios.post('https://cd18-113-193-19-90.ngrok-free.app/api/signup', formData, {
+      const response = await axios.post('https://cd18-113-193-19-90.ngrok-free.app/api/auth/signup', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

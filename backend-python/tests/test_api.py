@@ -1,6 +1,9 @@
 import os
-from fastapi.testclient import TestClient
-from app.main import app  # Adjust if needed
+import sys
+# Add parent directory of tests (backend-python) to sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from main import app  # Adjust if needed
 
 client = TestClient(app)
 
